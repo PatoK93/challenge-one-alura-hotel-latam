@@ -11,5 +11,7 @@
 	<classpathentry kind="lib" path="D:/Pato/Oracle/ONE/hotelAlura/jcalendar/lib/jgoodies-looks-2.4.1.jar"/>
 	<classpathentry kind="lib" path="D:/Pato/Oracle/ONE/hotelAlura/jcalendar/lib/junit-4.6.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-java-8.0.26.jar"/>
+	<classpathentry kind="lib" path="D:/Pato/Oracle/ONE/hotelAlura/poolConnection/c3p0-0.9.5.5.jar"/>
+	<classpathentry kind="lib" path="D:/Pato/Oracle/ONE/hotelAlura/poolConnection/mchange-commons-java-0.2.19.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
