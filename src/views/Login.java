@@ -4,6 +4,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controller.HuespedController;
+import modelo.Huesped;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -29,6 +33,7 @@ public class Login extends JFrame {
 	private JPasswordField txtContrasena;
 	int xMouse, yMouse;
 	private JLabel labelExit;
+	private HuespedController huespedController; 
 
 	/**
 	 * Launch the application.
@@ -50,6 +55,9 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		
+		this.huespedController = new HuespedController();
+		
 		setResizable(false);
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -235,12 +243,19 @@ public class Login extends JFrame {
 	}
 	
 	private void Login() {
-		 String Usuario= "admin";
-	     String Contraseña="admin";
+			String mail = new String (txtUsuario.getText());
+	        String pass = new String (txtContrasena.getPassword());
+	   
+	        Huesped huesped = new Huesped();
+	        
+	        huesped = huespedController.listarHuesped(mail, pass);
+	        
+	        if(huesped.getMail() == null)
+	        	huesped.setMail("");
+	        if(huesped.getPass() == null)
+	        	huesped.setPass("");
 
-	        String contrase=new String (txtContrasena.getPassword());
-
-	        if(txtUsuario.getText().equals(Usuario) && contrase.equals(Contraseña)){
+	        if(huesped.getMail().equals(mail) && huesped.getPass().equals(pass)){
 	            MenuUsuario menu = new MenuUsuario();
 	            menu.setVisible(true);
 	            dispose();	 

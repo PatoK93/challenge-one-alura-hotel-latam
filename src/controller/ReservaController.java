@@ -3,7 +3,6 @@ package controller;
 import java.util.List;
 
 import factory.ConnectionFactory;
-import modelo.Huesped;
 import modelo.Reserva;
 import dao.ReservaDAO;
 
@@ -12,7 +11,7 @@ public class ReservaController {
     private ReservaDAO reservaDAO;
 
     public ReservaController() {
-        var factory = new ConnectionFactory();
+    	ConnectionFactory factory = new ConnectionFactory();
         this.reservaDAO = new ReservaDAO(factory.recuperaConexion());
     }
 

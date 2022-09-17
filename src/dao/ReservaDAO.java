@@ -49,37 +49,6 @@ public class ReservaDAO {
             throw new RuntimeException(e);
         }
     }
-
-    //No sirve para este fin ya que no filta por huesped!
-    public List<Reserva> listar() {
-        List<Reserva> resultado = new ArrayList<>();
-
-        try {
-            String sql = "SELECT fechaEntrada, fechaSalida, valor, formaPago, idHuesped FROM reservas";
-            
-            final PreparedStatement statement = con
-                    .prepareStatement(sql);
-
-            try (statement) {
-                final ResultSet resultSet = statement.executeQuery();
-
-                try (resultSet) {
-                    while (resultSet.next()) {
-                        resultado.add(new Reserva(
-                                resultSet.getString("fechaEntrada"),
-                                resultSet.getString("fechaSalida"),
-                                resultSet.getInt("valor"),
-                                resultSet.getString("formaPago"),
-                                resultSet.getInt("idHuesped")));
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return resultado;
-    }
     
     public List<Reserva> listarReservasPorHuesped(Integer idHuesped) {
     	List<Reserva> reservas = new ArrayList<>();

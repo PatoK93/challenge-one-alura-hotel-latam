@@ -1,5 +1,8 @@
 package modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Huesped {
 
     private Integer id;
@@ -18,7 +21,17 @@ public class Huesped {
     
     private String pass;
     
-    public Huesped() {}
+    private List<Reserva> reservas = new ArrayList<>();
+    
+    public List<Reserva> getReservas() {
+		return reservas;
+	}
+
+	public void setReservas(List<Reserva> reservas) {
+		this.reservas = reservas;
+	}
+
+	public Huesped() {}
 
     public Huesped(String nombre, String apellido, String fechaNacimiento, String nacionalidad, String telefono, String mail, String pass) {
         this.nombre = nombre;
@@ -28,6 +41,12 @@ public class Huesped {
         this.telefono = telefono;
         this.mail = mail;
         this.pass = pass;
+    }
+    
+    public Huesped(Integer id, String nombre, String apellido) {
+    	this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
     }
 
     public Integer getId() {
@@ -99,6 +118,14 @@ public class Huesped {
         return String.format(
                 "{ id: %d, nombre: %s, apellido: %s, fechaNacimiento: %s, nacionalidad: %s, telefono: %s, mail: %s, pass: %s }",
                 this.id, this.nombre, this.apellido, this.fechaNacimiento, this.nacionalidad, this.telefono, this.mail, this.pass);
+    }
+    
+    public void agregar(Reserva reserva) {
+        this.reservas.add(reserva);
+    }
+
+    public List<Reserva> getProductos() {
+        return this.reservas;
     }
 	
 }

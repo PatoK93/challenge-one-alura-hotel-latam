@@ -15,6 +15,8 @@ import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.text.Format;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -110,6 +112,13 @@ public class ReservasView extends JFrame {
 		txtFechaE.setBorder(new LineBorder(SystemColor.window));
 		txtFechaE.setDateFormatString("yyyy-MM-dd");
 		txtFechaE.setFont(new Font("Roboto", Font.PLAIN, 18));
+		txtFechaE.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (ReservasView.txtFechaE.getDate() == null) {
+					ReservasView.txtValor.setText("");
+				}
+			}
+		});
 		panel.add(txtFechaE);
 		
 		lblValorSimbolo = new JLabel("$");
@@ -141,7 +150,19 @@ public class ReservasView extends JFrame {
 		txtFechaS.setFont(new Font("Roboto", Font.PLAIN, 18));
 		txtFechaS.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-//Activa el evento, después del usuario seleccionar las fechas se debe calcular el valor de la reserva
+				if (ReservasView.txtFechaS.getDate() == null) {
+					ReservasView.txtValor.setText("");
+				}
+				
+				if(ReservasView.txtFechaE.getDate().before(ReservasView.txtFechaS.getDate())) {
+					
+					LocalDate fechaCheckIn = LocalDate.parse(ReservasView.txtFechaE.getDate().toString());
+					LocalDate fechaCheckOut = LocalDate.parse(ReservasView.txtFechaS.getDate().toString());
+					
+					Duration difFecha = Duration.between(fechaCheckIn.atStartOfDay(), fechaCheckOut.atStartOfDay());
+					Integer valor = (int) (difFecha.toDays() * 100);
+					txtValor.setText(valor.toString());
+				}	
 			}
 		});
 		txtFechaS.setDateFormatString("yyyy-MM-dd");
@@ -327,5 +348,6 @@ public class ReservasView extends JFrame {
 	        int x = evt.getXOnScreen();
 	        int y = evt.getYOnScreen();
 	        this.setLocation(x - xMouse, y - yMouse);
-}
+	    }
+	   	    
 }

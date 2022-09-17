@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import modelo.Huesped;
+import modelo.Reserva;
 
 public class HuespedDAO {
 	
@@ -53,7 +53,6 @@ public class HuespedDAO {
         }
     }
 
-    //Lista todo, no sirve para este fin!
     public List<Huesped> listar() {
         List<Huesped> resultado = new ArrayList<>();
 
@@ -86,14 +85,15 @@ public class HuespedDAO {
         return resultado;
     }
     
-    public Huesped listarHuesped(String mail) {
+    public Huesped listarHuesped(String mail, String pass) {
     	Huesped huesped = new Huesped();
     	
         try {
-            final PreparedStatement statement = con.prepareStatement("SELECT nombre, apellido, fechaNacimiento, nacionalidad, telefono, mail, pass FROM huespedes WHERE mail = ?");
+            final PreparedStatement statement = con.prepareStatement("SELECT nombre, apellido, fechaNacimiento, nacionalidad, telefono, mail, pass FROM huespedes WHERE mail = ? AND pass = ?");
 
             try (statement) {
                 statement.setString(1, mail);
+                statement.setString(2, pass);
                 statement.execute();
                 
                 final ResultSet resultSet = statement.getResultSet();
@@ -101,12 +101,12 @@ public class HuespedDAO {
                 try (resultSet) {
                     while (resultSet.next()) {
                     	huesped.setNombre(resultSet.getString("nombre"));
-                    	huesped.setNombre(resultSet.getString("apellido"));
-                    	huesped.setNombre(resultSet.getString("fechaNacimiento"));
-                    	huesped.setNombre(resultSet.getString("nacionalidad"));
-                    	huesped.setNombre(resultSet.getString("telefono"));
-                    	huesped.setNombre(resultSet.getString("mail"));
-                    	huesped.setNombre(resultSet.getString("pass"));
+                    	huesped.setApellido(resultSet.getString("apellido"));
+                    	huesped.setFechaNacimiento(resultSet.getString("fechaNacimiento"));
+                    	huesped.setNacionalidad(resultSet.getString("nacionalidad"));
+                    	huesped.setTelefono(resultSet.getString("telefono"));
+                    	huesped.setMail(resultSet.getString("mail"));
+                    	huesped.setPass(resultSet.getString("pass"));
             }
         }
                 }
@@ -166,5 +166,52 @@ public class HuespedDAO {
             throw new RuntimeException(e);
         }
     }
+    
+    public List<Huesped> listarConReservas() {
+        List<Huesped> resultado = new ArrayList<>();
 
+        try {
+            String sql = "SELECT r.fechaEntrada, r.fechaSalida, r.valor, r.formaPago, h.id ,h.nombre, h.apellido FROM reservas AS r "
+            		+ "INNER JOIN huespedes AS h ON h.id = r.idHuesped";
+            
+            final PreparedStatement statement = con
+                    .prepareStatement(sql);
+
+            try (statement) {
+                final ResultSet resultSet = statement.executeQuery();
+
+                try (resultSet) {
+                    while (resultSet.next()) {
+                        int huespedId = resultSet.getInt("h.id");
+                        String huespedNombre = resultSet.getString("h.nombre");
+                        String huespedApellido = resultSet.getString("h.apellido");
+                        
+                        Huesped huesped = resultado
+                            .stream()
+                            .filter(hue -> hue.getId().equals(huespedId))
+                            .findAny().orElseGet(() -> {
+                                Huesped hue = new Huesped(
+                                		huespedId, huespedNombre, huespedApellido);
+                                resultado.add(hue);
+                                
+                                return hue;
+                            });
+                        
+                        Reserva reserva = new Reserva(
+                                resultSet.getString("r.fechaEntrada"),
+                                resultSet.getString("r.fechaSalida"),
+                                resultSet.getInt("r.valor"),
+                                resultSet.getString("r.formaPago"));
+                        
+                        huesped.agregar(reserva);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return resultado;
+    }
+    
 }

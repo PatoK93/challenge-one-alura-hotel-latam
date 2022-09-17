@@ -1,13 +1,10 @@
 package modelo;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Reserva {
 
     private Integer id;
 
-    private String fechaEntrada;
+	private String fechaEntrada;
     
     private String fechaSalida;
     
@@ -17,7 +14,6 @@ public class Reserva {
     
     private Integer idHuesped;
     
-    private List<Huesped> huespedes = new ArrayList<>();
 
     public Reserva(String fechaEntrada, String fechaSalida, Integer valor, String formaPago, Integer idHuesped) {
         this.fechaEntrada = fechaEntrada;
@@ -33,14 +29,21 @@ public class Reserva {
         this.valor = valor;
         this.formaPago = formaPago;
     }
+    
+    public Reserva (String fechaEntrada, String fechaSalida, Integer valor, String formaPago, String nombre, String apellido) {
+        this.fechaEntrada = fechaEntrada;
+        this.fechaSalida = fechaSalida;
+        this.valor = valor;
+        this.formaPago = formaPago;
+    }
 
     public Integer getId() {
         return this.id;
     }
     
-    public void setId(Integer idd) {
-        this.id = id;
-    }
+    public void setId(Integer id) {
+		this.id = id;
+	}
 
     public String getFechaEntrada() {
 		return this.fechaEntrada;
@@ -82,23 +85,12 @@ public class Reserva {
 		this.idHuesped = idHuesped;
 	}
 
-	public List<Huesped> getHuespedes() {
-		return this.huespedes;
-	}
-
-	public void setHuespedes(List<Huesped> huespedes) {
-		this.huespedes = huespedes;
-	}
 
 	@Override
     public String toString() {
         return String.format(
                 "{ id: %d, fechaEntrada: %s, fechaSalida: %s, valor: %d, formaPago: %s, idHuesped: %d }",
                 this.id, this.fechaEntrada, this.fechaSalida, this.valor, this.formaPago, this.idHuesped);
-    }
-
-    public void agregar(Huesped huesped) {
-        this.huespedes.add(huesped);
     }
 	
 }
